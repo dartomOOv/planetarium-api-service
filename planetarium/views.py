@@ -31,11 +31,11 @@ class AstronomyThemeViewSet(viewsets.ModelViewSet):
     serializer_class = AstronomyThemeSerializer
 
 
-class TicketThemeViewSet(viewsets.ModelViewSet):
+class TicketViewSet(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
 
 
-class ReservationThemeViewSet(viewsets.ModelViewSet):
+class ReservationViewSet(viewsets.ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
