@@ -5,12 +5,12 @@ from config.settings import AUTH_USER_MODEL
 
 
 class ShowSession(models.Model):
-    astronomy_shows = models.ForeignKey(to="AstronomyShow", on_delete=models.CASCADE, related_name="sessions")
+    astronomy_show = models.ForeignKey(to="AstronomyShow", on_delete=models.CASCADE, related_name="sessions")
     planetarium_dome = models.ForeignKey(to="PlanetariumDome", on_delete=models.CASCADE, related_name="sessions")
     show_time = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.astronomy_shows.title} in {self.planetarium_dome.name} Dome at {self.show_time}"
+        return f"{self.astronomy_show.title} in {self.planetarium_dome.name} Dome at {self.show_time}"
 
 
 class PlanetariumDome(models.Model):
@@ -49,7 +49,7 @@ class Ticket(models.Model):
     reservation = models.ForeignKey(to="Reservation", on_delete=models.CASCADE, related_name="tickets")
 
     def __str__(self):
-        return f"Ticket: row - {self.row}, seat - {self.seat} ({self.show_session.astronomy_shows.title})"
+        return f"Ticket: row - {self.row}, seat - {self.seat} ({self.show_session.astronomy_show.title})"
 
     @staticmethod
     def validate_seat_row(
