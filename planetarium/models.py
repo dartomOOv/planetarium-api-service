@@ -25,6 +25,7 @@ class PlanetariumDome(models.Model):
 class AstronomyShow(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField()
+    theme = models.ManyToManyField(to="ShowTheme", related_name="astronomy_shows")
 
     def __str__(self):
         return self.title
@@ -35,11 +36,6 @@ class ShowTheme(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class AstronomyTheme(models.Model):
-    astronomy_shows = models.ForeignKey(to="AstronomyShow", on_delete=models.CASCADE, related_name="astronomyshow_themes")
-    themes = models.ForeignKey(to="ShowTheme", on_delete=models.CASCADE, related_name="theme_astronomyshows")
 
 
 class Ticket(models.Model):
