@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 
 from config.settings import AUTH_USER_MODEL
@@ -9,21 +10,34 @@ class ShowSession(models.Model):
     planetarium_dome = models.ForeignKey(to="PlanetariumDome", on_delete=models.CASCADE, related_name="sessions")
     show_time = models.DateTimeField()
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["astronomy_show", "planetarium_dome"],
+                name="unique_show_dome"
+            )
+        ]
+
     def __str__(self):
         return f"{self.astronomy_show.title} in {self.planetarium_dome.name} Dome at {self.show_time}"
 
 
+
 class PlanetariumDome(models.Model):
     name = models.CharField(max_length=128)
-    rows = models.IntegerField()
-    seats_in_row = models.IntegerField()
+    rows = models.IntegerField(validators=[MinValueValidator(limit_value=0)])
+    seats_in_row = models.IntegerField(validators=[MinValueValidator(limit_value=0)])
 
     def __str__(self):
         return f"{self.name} (rows: {self.rows}, seats in row: {self.seats_in_row})"
 
+    @property
+    def total_seats(self):
+        return self.rows * self.seats_in_row
+
 
 class AstronomyShow(models.Model):
-    title = models.CharField(max_length=64)
+    title = models.CharField(max_length=64, unique=True)
     description = models.TextField()
     themes = models.ManyToManyField(to="ShowTheme", related_name="astronomy_shows")
 
