@@ -83,7 +83,6 @@ class TicketSerializer(serializers.ModelSerializer):
 
 class TicketListSerializer(TicketSerializer):
     show_session = serializers.SlugRelatedField(
-        many=False,
         read_only=True,
         slug_field="astronomy_show.title",
     )

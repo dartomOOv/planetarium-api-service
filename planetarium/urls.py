@@ -7,7 +7,6 @@ from planetarium.views import (
     PlanetariumDomeViewSet,
     ReservationViewSet,
     ShowThemeViewSet,
-    TicketViewSet,
 )
 
 
@@ -17,7 +16,6 @@ router.register("show-sessions", ShowSessionViewSet)
 router.register("planetarium-domes", PlanetariumDomeViewSet)
 router.register("astronomy-shows", AstronomyShowViewSet)
 router.register("show-themes", ShowThemeViewSet)
-router.register("tickets", TicketViewSet)
 router.register("reservations", ReservationViewSet)
 
 app_name = "planetarium"

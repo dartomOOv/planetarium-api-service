@@ -82,18 +82,6 @@ class ShowThemeViewSet(viewsets.ModelViewSet):
     serializer_class = ShowThemeSerializer
 
 
-class TicketViewSet(viewsets.ModelViewSet):
-    queryset = Ticket.objects.all()
-    serializer_class = TicketSerializer
-
-    def get_serializer_class(self):
-        if self.action == "list":
-            return TicketListSerializer
-        if self.action == "retrieve":
-            return TicketRetrieveSerializer
-        return TicketSerializer
-
-
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
