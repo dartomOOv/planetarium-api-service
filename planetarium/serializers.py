@@ -13,19 +13,31 @@ from planetarium.models import (
 class PlanetariumDomeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlanetariumDome
-        fields = "__all__"
-
-
-class AstronomyShowSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AstronomyShow
-        fields = "__all__"
+        fields = ["id", "name", "rows", "seats_in_row"]
 
 
 class ShowThemeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShowTheme
-        fields = "__all__"
+        fields = ["id", "name"]
+
+
+class AstronomyShowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AstronomyShow
+        fields = ["id", "title", "description", "themes"]
+
+
+class AstronomyShowListSerializer(AstronomyShowSerializer):
+    themes = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field="name"
+    )
+
+
+class AstronomyShowRetrieveSerializer(AstronomyShowSerializer):
+    themes = ShowThemeSerializer(many=True)
 
 
 class ShowSessionSerializer(serializers.ModelSerializer):
@@ -40,7 +52,7 @@ class ShowSessionListSerializer(ShowSessionSerializer):
 
 
 class ShowSessionDetailSerializer(ShowSessionSerializer):
-    astronomy_show = AstronomyShowSerializer()
+    astronomy_show = AstronomyShowListSerializer()
     planetarium_dome = PlanetariumDomeSerializer()
 
 
