@@ -1,6 +1,7 @@
 from django.db.models import Count, F
 from rest_framework import viewsets, mixins
 
+from planetarium.mixins import QueryParamsTransform
 from planetarium.models import (
     ShowSession,
     PlanetariumDome,
@@ -33,13 +34,6 @@ class ShowSessionViewSet(
     queryset = ShowSession.objects.all()
     serializer_class = ShowSessionSerializer
 
-    def get_serializer_class(self):
-        if self.action == "list":
-            return ShowSessionListSerializer
-        if self.action == "retrieve":
-            return ShowSessionRetrieveSerializer
-        return ShowSessionSerializer
-
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.action == "list":
@@ -54,6 +48,13 @@ class ShowSessionViewSet(
             )
         return queryset
 
+    def get_serializer_class(self):
+        if self.action == "list":
+            return ShowSessionListSerializer
+        if self.action == "retrieve":
+            return ShowSessionRetrieveSerializer
+        return ShowSessionSerializer
+
 
 class PlanetariumDomeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = PlanetariumDome.objects.all()
@@ -66,7 +67,7 @@ class PlanetariumDomeViewSet(viewsets.ReadOnlyModelViewSet):
         return PlanetariumDomeSerializer
 
 
-class AstronomyShowViewSet(viewsets.ModelViewSet):
+class AstronomyShowViewSet(QueryParamsTransform, viewsets.ModelViewSet):
     queryset = AstronomyShow.objects.prefetch_related("themes")
     serializer_class = AstronomyShowSerializer
 
@@ -77,6 +78,20 @@ class AstronomyShowViewSet(viewsets.ModelViewSet):
             return AstronomyShowRetrieveSerializer
         return AstronomyShowSerializer
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        themes_id = self.request.query_params.get("themes")
+        show_title = self.request.query_params.get("title")
+
+        if themes_id:
+            themes_id = self.query_params_to_int(themes_id)
+            queryset = queryset.filter(themes__pk__in=themes_id)
+
+        if show_title:
+            queryset = queryset.filter(title__icontains=show_title)
+
+        return queryset
+
 
 class ShowThemeViewSet(
     mixins.ListModelMixin,
@@ -86,6 +101,15 @@ class ShowThemeViewSet(
 ):
     queryset = ShowTheme.objects.all()
     serializer_class = ShowThemeSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        theme_name = self.request.query_params.get("name")
+
+        if theme_name:
+            queryset = queryset.filter(name__icontains=theme_name)
+
+        return queryset
 
 
 class ReservationViewSet(viewsets.ModelViewSet):
