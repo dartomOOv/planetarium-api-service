@@ -1,5 +1,6 @@
 from django.db.models import Count, F
 from rest_framework import viewsets, mixins
+from rest_framework.permissions import IsAuthenticated
 
 from planetarium.mixins import QueryParamsTransform
 from planetarium.models import (
@@ -117,6 +118,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
         "tickets__show_session__astronomy_show"
     )
     serializer_class = ReservationSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         queryset = super().get_queryset()
