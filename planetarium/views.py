@@ -45,7 +45,7 @@ class ShowSessionViewSet(
         if self.action == "list":
             queryset = (
                 queryset
-                .select_related()
+                .prefetch_related("tickets")
                 .annotate(available_tickets=(
                         F("planetarium_dome__rows")
                         * F("planetarium_dome__seats_in_row")
@@ -67,7 +67,7 @@ class PlanetariumDomeViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class AstronomyShowViewSet(viewsets.ModelViewSet):
-    queryset = AstronomyShow.objects.all()
+    queryset = AstronomyShow.objects.prefetch_related("themes")
     serializer_class = AstronomyShowSerializer
 
     def get_serializer_class(self):
@@ -89,8 +89,19 @@ class ShowThemeViewSet(
 
 
 class ReservationViewSet(viewsets.ModelViewSet):
-    queryset = Reservation.objects.all()
+    queryset = Reservation.objects.prefetch_related(
+        "tickets__show_session__astronomy_show"
+    )
     serializer_class = ReservationSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.action == "retrieve":
+            queryset = queryset.prefetch_related(
+                "tickets__show_session__planetarium_dome",
+            )
+
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

@@ -100,7 +100,7 @@ class ShowSessionRetrieveSerializer(ShowSessionSerializer):
 
 
 class TicketRetrieveSerializer(TicketListSerializer):
-    show_session = ShowSessionRetrieveSerializer()
+    show_session = ShowSessionListSerializer()
 
 
 class ReservationSerializer(serializers.ModelSerializer):
