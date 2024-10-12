@@ -59,18 +59,58 @@ class ShowSessionListSerializer(ShowSessionSerializer):
     planetarium_dome = serializers.SlugRelatedField(slug_field="name", read_only=True)
 
 
-class ShowSessionDetailSerializer(ShowSessionSerializer):
+class ShowSessionRetrieveSerializer(ShowSessionSerializer):
     astronomy_show = AstronomyShowListSerializer()
-    planetarium_dome = PlanetariumDomeSerializer()
+    planetarium_dome = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field="name"
+    )
 
 
 class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
-        fields = "__all__"
+        fields = ["id", "row", "seat", "show_session"]
+
+    def validate(self, attrs):
+        Ticket.validate_seat_row(
+            attrs["row"],
+            attrs["seat"],
+            attrs["show_session"].planetarium_dome,
+        )
+        return attrs
+
+
+class TicketListSerializer(TicketSerializer):
+    show_session = serializers.SlugRelatedField(
+        many=False,
+        read_only=True,
+        slug_field="astronomy_show.title",
+    )
+
+
+class TicketRetrieveSerializer(TicketListSerializer):
+    show_session = ShowSessionRetrieveSerializer()
 
 
 class ReservationSerializer(serializers.ModelSerializer):
+    tickets = TicketSerializer(many=True)
+
     class Meta:
         model = Reservation
-        fields = "__all__"
+        fields = ["id", "created_at", "tickets"]
+
+    def create(self, validated_data):
+        tickets = validated_data.pop("tickets")
+        reservation = Reservation.objects.create(**validated_data)
+        for ticket in tickets:
+            Ticket.objects.create(reservation=reservation, **ticket)
+        return reservation
+
+
+class ReservationListSerializer(ReservationSerializer):
+    tickets = TicketListSerializer(many=True)
+
+
+class ReservationRetrieveSerializer(ReservationSerializer):
+    tickets = TicketRetrieveSerializer(many=True)

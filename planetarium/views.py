@@ -1,4 +1,4 @@
-from django.db.models import Count, Q, F
+from django.db.models import Count, F
 from rest_framework import viewsets
 
 from planetarium.models import (
@@ -17,10 +17,14 @@ from planetarium.serializers import (
     TicketSerializer,
     ReservationSerializer,
     ShowSessionListSerializer,
-    ShowSessionDetailSerializer,
+    ShowSessionRetrieveSerializer,
     AstronomyShowListSerializer,
     AstronomyShowRetrieveSerializer,
-    PlanetariumDomeListSerializer
+    PlanetariumDomeListSerializer,
+    TicketListSerializer,
+    ReservationListSerializer,
+    ReservationRetrieveSerializer,
+    TicketRetrieveSerializer
 )
 
 
@@ -32,7 +36,7 @@ class ShowSessionViewSet(viewsets.ModelViewSet):
         if self.action == "list":
             return ShowSessionListSerializer
         if self.action == "retrieve":
-            return ShowSessionDetailSerializer
+            return ShowSessionRetrieveSerializer
         return ShowSessionSerializer
 
     def get_queryset(self):
@@ -82,7 +86,24 @@ class TicketViewSet(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
 
+    def get_serializer_class(self):
+        if self.action == "list":
+            return TicketListSerializer
+        if self.action == "retrieve":
+            return TicketRetrieveSerializer
+        return TicketSerializer
+
 
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return ReservationListSerializer
+        if self.action == "retrieve":
+            return ReservationRetrieveSerializer
+        return ReservationSerializer
