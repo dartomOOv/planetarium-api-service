@@ -1,3 +1,4 @@
+from django.db.models import Count, Q, F
 from rest_framework import viewsets
 
 from planetarium.models import (
@@ -34,9 +35,22 @@ class ShowSessionViewSet(viewsets.ModelViewSet):
             return ShowSessionDetailSerializer
         return ShowSessionSerializer
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.action == "list":
+            queryset = (
+                queryset
+                .select_related()
+                .annotate(available_tickets=(
+                        F("planetarium_dome__rows")
+                        * F("planetarium_dome__seats_in_row")
+                        - Count("tickets")
+                ))
+            )
+        return queryset
 
 
-class PlanetariumDomeViewSet(viewsets.ModelViewSet):
+class PlanetariumDomeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = PlanetariumDome.objects.all()
     serializer_class = PlanetariumDomeSerializer
 
