@@ -1,12 +1,11 @@
 from django.db.models import Count, F
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 
 from planetarium.models import (
     ShowSession,
     PlanetariumDome,
     AstronomyShow,
     ShowTheme,
-    Ticket,
     Reservation
 )
 from planetarium.serializers import (
@@ -14,21 +13,23 @@ from planetarium.serializers import (
     PlanetariumDomeSerializer,
     AstronomyShowSerializer,
     ShowThemeSerializer,
-    TicketSerializer,
     ReservationSerializer,
     ShowSessionListSerializer,
     ShowSessionRetrieveSerializer,
     AstronomyShowListSerializer,
     AstronomyShowRetrieveSerializer,
     PlanetariumDomeListSerializer,
-    TicketListSerializer,
     ReservationListSerializer,
     ReservationRetrieveSerializer,
-    TicketRetrieveSerializer
 )
 
 
-class ShowSessionViewSet(viewsets.ModelViewSet):
+class ShowSessionViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
+    viewsets.GenericViewSet
+):
     queryset = ShowSession.objects.all()
     serializer_class = ShowSessionSerializer
 
@@ -77,7 +78,12 @@ class AstronomyShowViewSet(viewsets.ModelViewSet):
         return AstronomyShowSerializer
 
 
-class ShowThemeViewSet(viewsets.ModelViewSet):
+class ShowThemeViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
+    viewsets.GenericViewSet
+):
     queryset = ShowTheme.objects.all()
     serializer_class = ShowThemeSerializer
 
