@@ -46,27 +46,6 @@ class AstronomyShowRetrieveSerializer(AstronomyShowSerializer):
     themes = ShowThemeSerializer(many=True)
 
 
-class ShowSessionSerializer(serializers.ModelSerializer):
-    available_tickets = serializers.IntegerField(read_only=True)
-
-    class Meta:
-        model = ShowSession
-        fields = ["id", "astronomy_show", "planetarium_dome", "show_time", "available_tickets"]
-
-
-class ShowSessionListSerializer(ShowSessionSerializer):
-    astronomy_show = serializers.SlugRelatedField(slug_field="title", read_only=True)
-    planetarium_dome = serializers.SlugRelatedField(slug_field="name", read_only=True)
-
-
-class ShowSessionRetrieveSerializer(ShowSessionSerializer):
-    astronomy_show = AstronomyShowListSerializer()
-    planetarium_dome = serializers.SlugRelatedField(
-        read_only=True,
-        slug_field="name"
-    )
-
-
 class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
@@ -86,6 +65,38 @@ class TicketListSerializer(TicketSerializer):
         read_only=True,
         slug_field="astronomy_show.title",
     )
+
+
+class ShowSessionTicketSerializer(TicketSerializer):
+    class Meta:
+        model = Ticket
+        fields = ["seat", "row"]
+
+
+class ShowSessionSerializer(serializers.ModelSerializer):
+    available_tickets = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = ShowSession
+        fields = ["id", "astronomy_show", "planetarium_dome", "show_time", "available_tickets"]
+
+
+class ShowSessionListSerializer(ShowSessionSerializer):
+    astronomy_show = serializers.SlugRelatedField(slug_field="title", read_only=True)
+    planetarium_dome = serializers.SlugRelatedField(slug_field="name", read_only=True)
+
+
+class ShowSessionRetrieveSerializer(ShowSessionSerializer):
+    astronomy_show = AstronomyShowListSerializer()
+    planetarium_dome = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field="name"
+    )
+    taken_tickets = ShowSessionTicketSerializer(many=True, source="tickets")
+
+    class Meta:
+        model = ShowSession
+        fields = ShowSessionSerializer.Meta.fields + ["taken_tickets"]
 
 
 class TicketRetrieveSerializer(TicketListSerializer):
