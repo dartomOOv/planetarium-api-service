@@ -1,7 +1,13 @@
 from rest_framework import serializers
 
-from planetarium.models import ShowSession, PlanetariumDome, AstronomyShow, ShowTheme, AstronomyTheme, Ticket, \
+from planetarium.models import (
+    ShowSession,
+    PlanetariumDome,
+    AstronomyShow,
+    ShowTheme,
+    Ticket,
     Reservation
+)
 
 
 class PlanetariumDomeSerializer(serializers.ModelSerializer):
@@ -19,12 +25,6 @@ class AstronomyShowSerializer(serializers.ModelSerializer):
 class ShowThemeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShowTheme
-        fields = "__all__"
-
-
-class AstronomyThemeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AstronomyTheme
         fields = "__all__"
 
 

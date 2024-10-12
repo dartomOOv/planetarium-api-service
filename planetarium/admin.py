@@ -2,7 +2,6 @@ from django.contrib import admin
 
 from planetarium.models import (
     AstronomyShow,
-    AstronomyTheme,
     Reservation,
     PlanetariumDome,
     ShowSession,
@@ -25,5 +24,4 @@ admin.site.register(ShowSession)
 admin.site.register(PlanetariumDome)
 admin.site.register(AstronomyShow)
 admin.site.register(ShowTheme)
-admin.site.register(AstronomyTheme)
 admin.site.register(Ticket)
