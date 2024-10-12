@@ -16,6 +16,12 @@ class PlanetariumDomeSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "rows", "seats_in_row"]
 
 
+class PlanetariumDomeListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlanetariumDome
+        fields = ["id", "name", "total_seats"]
+
+
 class ShowThemeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShowTheme
