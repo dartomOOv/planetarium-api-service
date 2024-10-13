@@ -1,4 +1,6 @@
 from django.db.models import Count, F
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
 
@@ -92,6 +94,23 @@ class AstronomyShowViewSet(QueryParamsTransform, viewsets.ModelViewSet):
             queryset = queryset.filter(title__icontains=show_title)
 
         return queryset
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "themes",
+                type=OpenApiTypes.STR,
+                description="Filter astronomy shows by title, ignoring letter case (ex. ?title=stars)",
+            ),
+            OpenApiParameter(
+                "title",
+                type=OpenApiTypes.NUMBER,
+                description="Filter astronomy shows by themes ids (ex. ?themes=1,2)",
+            )
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class ShowThemeViewSet(
