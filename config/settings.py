@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     # 3rd apps
     "rest_framework",
     "debug_toolbar",
+    "drf_spectacular",
 
     # project apps
     "planetarium",
@@ -132,6 +133,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "user.User"
 
 REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 4,
     "DEFAULT_PERMISSION_CLASSES": [
@@ -148,4 +150,17 @@ REST_FRAMEWORK = {
         'anon': '10/day',
         'user': '100/day'
     }
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Planetarium API",
+    "DESCRIPTION": "Order tickets for astronomy shows",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "defaultModelRendering": "model",
+        "defaultModelsExpandDepth": 2,
+        "defaultModelExpandDepth": 2,
+    },
 }
