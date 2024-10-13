@@ -61,7 +61,7 @@ class ShowSessionViewSet(
                         - Count("tickets")
                 ))
             )
-        return queryset
+        return queryset.distinct()
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -69,6 +69,23 @@ class ShowSessionViewSet(
         if self.action == "retrieve":
             return ShowSessionRetrieveSerializer
         return ShowSessionSerializer
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "show",
+                type={"type": "list", "items": {"type": "number"}},
+                description="Filter show sessions by astronomy shows id (ex. ?show=1,2)",
+            ),
+            OpenApiParameter(
+                "dome",
+                type={"type": "list", "items": {"type": "number"}},
+                description="Filter show sessions by planetarium domes id (ex. ?dome=1,2)",
+            )
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class PlanetariumDomeViewSet(viewsets.ReadOnlyModelViewSet):
@@ -89,6 +106,18 @@ class PlanetariumDomeViewSet(viewsets.ReadOnlyModelViewSet):
             queryset = queryset.filter(name__icontains=planetarium_name)
 
         return queryset
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "name",
+                type=OpenApiTypes.STR,
+                description="Filter planetarium domes by name, ignoring letter case (ex. ?name=main)",
+            ),
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class AstronomyShowViewSet(QueryParamsTransform, viewsets.ModelViewSet):
@@ -114,7 +143,7 @@ class AstronomyShowViewSet(QueryParamsTransform, viewsets.ModelViewSet):
         if show_title:
             queryset = queryset.filter(title__icontains=show_title)
 
-        return queryset
+        return queryset.distinct()
 
     @extend_schema(
         parameters=[
@@ -125,8 +154,8 @@ class AstronomyShowViewSet(QueryParamsTransform, viewsets.ModelViewSet):
             ),
             OpenApiParameter(
                 "title",
-                type=OpenApiTypes.NUMBER,
-                description="Filter astronomy shows by themes ids (ex. ?themes=1,2)",
+                type={"type": "list", "items": {"type": "number"}},
+                description="Filter astronomy shows by themes id (ex. ?themes=1,2)",
             )
         ]
     )
