@@ -29,6 +29,7 @@ from planetarium.serializers import (
 
 
 class ShowSessionViewSet(
+    QueryParamsTransform,
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
@@ -39,6 +40,17 @@ class ShowSessionViewSet(
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        astronomy_shows_id = self.request.query_params.get("show")
+        planetarium_domes_id = self.request.query_params.get("dome")
+
+        if astronomy_shows_id:
+            astronomy_shows_id = self.query_params_to_int(astronomy_shows_id)
+            queryset = queryset.filter(astronomy_show__id__in=astronomy_shows_id)
+
+        if planetarium_domes_id:
+            planetarium_domes_id = self.query_params_to_int(planetarium_domes_id)
+            queryset = queryset.filter(planetarium_dome__id__in=planetarium_domes_id)
+
         if self.action == "list":
             queryset = (
                 queryset
@@ -68,6 +80,15 @@ class PlanetariumDomeViewSet(viewsets.ReadOnlyModelViewSet):
             return PlanetariumDomeListSerializer
 
         return PlanetariumDomeSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        planetarium_name = self.request.query_params.get("name")
+
+        if planetarium_name:
+            queryset = queryset.filter(name__icontains=planetarium_name)
+
+        return queryset
 
 
 class AstronomyShowViewSet(QueryParamsTransform, viewsets.ModelViewSet):
