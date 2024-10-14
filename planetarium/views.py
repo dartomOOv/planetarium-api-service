@@ -165,7 +165,6 @@ class AstronomyShowViewSet(QueryParamsTransform, viewsets.ModelViewSet):
 
 class ShowThemeViewSet(
     mixins.ListModelMixin,
-    mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
     viewsets.GenericViewSet
 ):
@@ -194,7 +193,12 @@ class ShowThemeViewSet(
         return super().list(request, *args, **kwargs)
 
 
-class ReservationViewSet(viewsets.ModelViewSet):
+class ReservationViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
+    viewsets.GenericViewSet
+):
     queryset = Reservation.objects.prefetch_related(
         "tickets__show_session__astronomy_show"
     )
