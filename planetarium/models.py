@@ -87,6 +87,11 @@ class Ticket(models.Model):
             planetarium_dome=self.show_session.planetarium_dome
         )
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["row", "seat", "show_session"], name="unique_row_seat_show")
+        ]
+
 
 class Reservation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
