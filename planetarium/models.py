@@ -6,21 +6,23 @@ from config.settings import AUTH_USER_MODEL
 
 
 class ShowSession(models.Model):
-    astronomy_show = models.ForeignKey(to="AstronomyShow", on_delete=models.CASCADE, related_name="sessions")
-    planetarium_dome = models.ForeignKey(to="PlanetariumDome", on_delete=models.CASCADE, related_name="sessions")
+    astronomy_show = models.ForeignKey(
+        to="AstronomyShow", on_delete=models.CASCADE, related_name="sessions"
+    )
+    planetarium_dome = models.ForeignKey(
+        to="PlanetariumDome", on_delete=models.CASCADE, related_name="sessions"
+    )
     show_time = models.DateTimeField()
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["astronomy_show", "planetarium_dome"],
-                name="unique_show_dome"
+                fields=["astronomy_show", "planetarium_dome"], name="unique_show_dome"
             )
         ]
 
     def __str__(self):
         return f"{self.astronomy_show.title} in {self.planetarium_dome.name} Dome at {self.show_time}"
-
 
 
 class PlanetariumDome(models.Model):
@@ -55,18 +57,18 @@ class ShowTheme(models.Model):
 class Ticket(models.Model):
     row = models.IntegerField()
     seat = models.IntegerField()
-    show_session = models.ForeignKey(to="ShowSession", on_delete=models.CASCADE, related_name="tickets")
-    reservation = models.ForeignKey(to="Reservation", on_delete=models.CASCADE, related_name="tickets")
+    show_session = models.ForeignKey(
+        to="ShowSession", on_delete=models.CASCADE, related_name="tickets"
+    )
+    reservation = models.ForeignKey(
+        to="Reservation", on_delete=models.CASCADE, related_name="tickets"
+    )
 
     def __str__(self):
         return f"Ticket: row - {self.row}, seat - {self.seat} ({self.show_session.astronomy_show.title})"
 
     @staticmethod
-    def validate_seat_row(
-        row: int,
-        seat: int,
-        planetarium_dome: PlanetariumDome
-    ):
+    def validate_seat_row(row: int, seat: int, planetarium_dome: PlanetariumDome):
         for ticket_attr_value, ticket_attr_name, dome_attr_name in [
             (row, "row", "rows"),
             (seat, "seat", "seats_in_row"),
@@ -84,18 +86,22 @@ class Ticket(models.Model):
         Ticket.validate_seat_row(
             row=self.row,
             seat=self.seat,
-            planetarium_dome=self.show_session.planetarium_dome
+            planetarium_dome=self.show_session.planetarium_dome,
         )
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["row", "seat", "show_session"], name="unique_row_seat_show")
+            models.UniqueConstraint(
+                fields=["row", "seat", "show_session"], name="unique_row_seat_show"
+            )
         ]
 
 
 class Reservation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(to=AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="reservations")
+    user = models.ForeignKey(
+        to=AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="reservations"
+    )
 
     class Meta:
         ordering = ["-created_at"]

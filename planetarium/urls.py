@@ -3,9 +3,9 @@ from rest_framework import routers
 
 from planetarium.views import (
     AstronomyShowViewSet,
-    ShowSessionViewSet,
     PlanetariumDomeViewSet,
     ReservationViewSet,
+    ShowSessionViewSet,
     ShowThemeViewSet,
 )
 
@@ -20,6 +20,4 @@ router.register("reservations", ReservationViewSet)
 
 app_name = "planetarium"
 
-urlpatterns = [
-    path("", include(router.urls))
-]
+urlpatterns = [path("", include(router.urls))]

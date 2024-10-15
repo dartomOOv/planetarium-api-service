@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
 from planetarium.models import (
-    ShowSession,
-    PlanetariumDome,
     AstronomyShow,
+    PlanetariumDome,
+    Reservation,
+    ShowSession,
     ShowTheme,
-    Ticket,
-    Reservation
+    Ticket
 )
 
 
