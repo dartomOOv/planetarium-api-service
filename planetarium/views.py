@@ -209,6 +209,8 @@ class ReservationViewSet(
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        queryset = queryset.filter(user=self.request.user)
+
         if self.action == "retrieve":
             queryset = queryset.prefetch_related(
                 "tickets__show_session__planetarium_dome",
