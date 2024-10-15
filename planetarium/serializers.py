@@ -6,7 +6,7 @@ from planetarium.models import (
     Reservation,
     ShowSession,
     ShowTheme,
-    Ticket
+    Ticket,
 )
 
 
@@ -35,11 +35,7 @@ class AstronomyShowSerializer(serializers.ModelSerializer):
 
 
 class AstronomyShowListSerializer(AstronomyShowSerializer):
-    themes = serializers.SlugRelatedField(
-        many=True,
-        read_only=True,
-        slug_field="name"
-    )
+    themes = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
 
 
 class AstronomyShowRetrieveSerializer(AstronomyShowSerializer):
@@ -78,7 +74,13 @@ class ShowSessionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ShowSession
-        fields = ["id", "astronomy_show", "planetarium_dome", "show_time", "available_tickets"]
+        fields = [
+            "id",
+            "astronomy_show",
+            "planetarium_dome",
+            "show_time",
+            "available_tickets",
+        ]
 
 
 class ShowSessionListSerializer(ShowSessionSerializer):
@@ -88,10 +90,7 @@ class ShowSessionListSerializer(ShowSessionSerializer):
 
 class ShowSessionRetrieveSerializer(ShowSessionSerializer):
     astronomy_show = AstronomyShowListSerializer()
-    planetarium_dome = serializers.SlugRelatedField(
-        read_only=True,
-        slug_field="name"
-    )
+    planetarium_dome = serializers.SlugRelatedField(read_only=True, slug_field="name")
     taken_tickets = ShowSessionTicketSerializer(many=True, source="tickets")
 
     class Meta:
