@@ -2,6 +2,14 @@
 
 API service for planetarium management written of DRF   
 
+## Features:
+
+* JWT Authentication
+* Documentation at '/api/schema/swagger-ui/' 
+* Admin panel at '/admin/'
+* Reservations managing
+* Filtering system
+
 ## Installing using GitHub
 
 Clone the repository and configure it:
@@ -14,7 +22,7 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Then change the name of '.env-sample' file to '.env' and put your own value here to run the django server successfully:
+Then change the name of '.env-sample' file to '.env' and put your own value in the key below to run the django server properly:
 
 * SECRET_KEY
 
@@ -29,7 +37,7 @@ docker-compose up
 
 ### Optional 
 
-If you want, you can load some data into db using commands:
+If you want, you can load some data into db using command:
 
 ```
 docker-compose run app sh -c "python manage.py loaddata data.json"
@@ -95,7 +103,7 @@ Users:
 * If access token doesn't work(you can check it using 'api/user/token/verify/' url) go to 'api/user/token/refresh/' and put in the given field refresh token.
 * If verify token doesn't work, repeat tokens retrieval at 'api/user/token/'.
 
-### If you want to use this API with Postgres, then open page 'api/schema/', where will start downloading of API scheme.
+### If you want to use this API with Postman, then open page 'api/schema/', where will start downloading of API scheme.
 
 ## Db structure used for this project: 
 
