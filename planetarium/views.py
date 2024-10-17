@@ -70,7 +70,7 @@ class ShowSessionViewSet(
             return ShowSessionListSerializer
         if self.action == "retrieve":
             return ShowSessionRetrieveSerializer
-        return ShowSessionSerializer
+        return self.serializer_class
 
     @extend_schema(
         parameters=[
@@ -98,7 +98,7 @@ class PlanetariumDomeViewSet(viewsets.ReadOnlyModelViewSet):
         if self.action == "list":
             return PlanetariumDomeListSerializer
 
-        return PlanetariumDomeSerializer
+        return self.serializer_class
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -131,7 +131,7 @@ class AstronomyShowViewSet(QueryParamsTransform, viewsets.ModelViewSet):
             return AstronomyShowListSerializer
         if self.action == "retrieve":
             return AstronomyShowRetrieveSerializer
-        return AstronomyShowSerializer
+        return self.serializer_class
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -226,4 +226,4 @@ class ReservationViewSet(
             return ReservationListSerializer
         if self.action == "retrieve":
             return ReservationRetrieveSerializer
-        return ReservationSerializer
+        return self.serializer_class
