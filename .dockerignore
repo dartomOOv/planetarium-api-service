@@ -1,0 +1,7 @@
+.env-sample
+db.sqlite
+env
+Dockerfile
+README.md
+.idea
+.gitignore
