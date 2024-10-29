@@ -1,0 +1,183 @@
+[
+  {
+    "model": "planetarium.showsession",
+    "pk": 1,
+    "fields": {
+      "astronomy_show": 1,
+      "planetarium_dome": 1,
+      "show_time": "2024-10-15T14:00:00Z"
+    }
+  },
+  {
+    "model": "planetarium.showsession",
+    "pk": 2,
+    "fields": {
+      "astronomy_show": 2,
+      "planetarium_dome": 2,
+      "show_time": "2024-10-16T16:00:00Z"
+    }
+  },
+  {
+    "model": "planetarium.planetariumdome",
+    "pk": 1,
+    "fields": {
+      "name": "Main Dome",
+      "rows": 10,
+      "seats_in_row": 20
+    }
+  },
+  {
+    "model": "planetarium.planetariumdome",
+    "pk": 2,
+    "fields": {
+      "name": "Second Dome",
+      "rows": 8,
+      "seats_in_row": 15
+    }
+  },
+  {
+    "model": "planetarium.astronomyshow",
+    "pk": 1,
+    "fields": {
+      "title": "Journey to the Stars",
+      "description": "Explore the wonders of the universe in this captivating show.",
+      "themes": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "model": "planetarium.astronomyshow",
+    "pk": 2,
+    "fields": {
+      "title": "Solar System Exploration",
+      "description": "A fascinating journey through our solar system.",
+      "themes": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "planetarium.showtheme",
+    "pk": 1,
+    "fields": {
+      "name": "Space Exploration"
+    }
+  },
+  {
+    "model": "planetarium.showtheme",
+    "pk": 2,
+    "fields": {
+      "name": "Astronomy Basics"
+    }
+  },
+  {
+    "model": "planetarium.ticket",
+    "pk": 1,
+    "fields": {
+      "row": 1,
+      "seat": 1,
+      "show_session": 1,
+      "reservation": 1
+    }
+  },
+  {
+    "model": "planetarium.ticket",
+    "pk": 2,
+    "fields": {
+      "row": 1,
+      "seat": 2,
+      "show_session": 1,
+      "reservation": 1
+    }
+  },
+  {
+    "model": "planetarium.ticket",
+    "pk": 3,
+    "fields": {
+      "row": 1,
+      "seat": 1,
+      "show_session": 2,
+      "reservation": 2
+    }
+  },
+  {
+    "model": "planetarium.ticket",
+    "pk": 4,
+    "fields": {
+      "row": 1,
+      "seat": 2,
+      "show_session": 2,
+      "reservation": 2
+    }
+  },
+  {
+    "model": "planetarium.ticket",
+    "pk": 5,
+    "fields": {
+      "row": 1,
+      "seat": 3,
+      "show_session": 1,
+      "reservation": 4
+    }
+  },
+  {
+    "model": "planetarium.reservation",
+    "pk": 1,
+    "fields": {
+      "created_at": "2024-10-12T09:19:59.514Z",
+      "user": 1
+    }
+  },
+  {
+    "model": "planetarium.reservation",
+    "pk": 2,
+    "fields": {
+      "created_at": "2024-10-12T09:20:06.550Z",
+      "user": 1
+    }
+  },
+  {
+    "model": "planetarium.reservation",
+    "pk": 4,
+    "fields": {
+      "created_at": "2024-10-14T08:03:14.567Z",
+      "user": 2
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$nxLavdQZRwzAqMzPBWtY7d$53lFuiTcqcNj6BUk89GQbVtEUCDSpKMKIUJqZ1FKKv4=",
+      "last_login": null,
+      "is_superuser": true,
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-10-14T08:01:27.278Z",
+      "email": "admin@admin.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$oAJTm9kfITdZItih1RIONR$g2lPoa7i9b+A411J3L6UuwsooARuZ/lps1OrZS1ogv0=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-10-14T08:01:27.281Z",
+      "email": "user@user.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]
